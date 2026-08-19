@@ -1,0 +1,16 @@
+---
+interface Props { compact?: boolean; dark?: boolean; }
+const { compact = false, dark = false } = Astro.props;
+---
+<a href="/" class="focus-ring inline-flex items-center gap-3 rounded-sm" aria-label="Panduan Tumpak Sewu — beranda">
+  <svg viewBox="0 0 64 64" class:list={[compact ? 'h-9 w-9' : 'h-11 w-11']} aria-hidden="true">
+    <circle cx="32" cy="32" r="30" fill={dark ? '#f2f5ee' : '#0b2820'} />
+    <path d="M12 37C16 26 23 20 32 16c9 4 16 10 20 21" fill="none" stroke={dark ? '#0b2820' : '#bde1dc'} stroke-width="3.2" stroke-linecap="round" />
+    <path d="M19 34l13-18 13 18" fill="none" stroke="#bd6843" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M18 38v11M25 36v16M32 35v18M39 36v16M46 38v11" stroke={dark ? '#0b2820' : '#f2f5ee'} stroke-width="2.6" stroke-linecap="round" />
+  </svg>
+  {!compact && <span class:list={["leading-none", dark ? "text-[#f2f5ee]" : "text-[#0b2820]"]}>
+    <strong class="display block text-[1.15rem]">Tumpak Sewu</strong>
+    <span class="mt-1 block text-[.58rem] font-bold uppercase tracking-[.22em] opacity-70">Panduan independen</span>
+  </span>}
+</a>

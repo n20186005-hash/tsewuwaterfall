@@ -1,0 +1,70 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+---
+<LegalLayout title="Pengaturan Cookie" description="Kelola Cookie esensial, analitik, preferensi, dan pemasaran untuk Panduan Tumpak Sewu.">
+  <p>Kami menggunakan Cookie dan penyimpanan lokal secara terbatas untuk menjaga fungsi situs dan, bila Anda memilihnya, memahami penggunaan halaman secara agregat. Anda dapat mengubah pilihan di bawah kapan saja.</p>
+
+  <div id="cookie-status" class="mt-8 rounded-2xl border border-[#1d5744]/20 bg-[#eef2e9] p-5 text-sm leading-6 text-[#34443d]" role="status">Memuat preferensi yang tersimpan…</div>
+
+  <div class="mt-8 divide-y divide-black/10 rounded-[1.5rem] border border-black/10 bg-white px-6">
+    <section class="grid gap-4 py-6 sm:grid-cols-[1fr_auto] sm:items-center">
+      <div><h2 class="!mt-0 !text-xl">Cookie esensial</h2><p class="!mt-2 text-sm">Diperlukan untuk fungsi dasar situs dan penyimpanan pilihan privasi. Kategori ini tidak dapat dinonaktifkan.</p></div>
+      <div class="rounded-full bg-[#dfe8db] px-4 py-2 text-xs font-extrabold uppercase tracking-[.1em] text-[#1d5744]">Selalu aktif</div>
+    </section>
+    <section class="grid gap-4 py-6 sm:grid-cols-[1fr_auto] sm:items-center">
+      <div><h2 class="!mt-0 !text-xl">Cookie analitik</h2><p class="!mt-2 text-sm">Jika diaktifkan, Google Analytics membantu kami memahami halaman yang digunakan dan pola kunjungan secara agregat.</p><p class="!mt-2 text-xs">Layanan: Google Analytics · ID pengukuran G-HXM22WWPKP</p></div>
+      <label class="inline-flex cursor-pointer items-center gap-3 font-bold text-[#0b2820]"><input id="analytics-toggle" type="checkbox" class="h-5 w-5 accent-[#1d5744]" /> Aktif</label>
+    </section>
+    <section class="grid gap-4 py-6 sm:grid-cols-[1fr_auto] sm:items-center">
+      <div><h2 class="!mt-0 !text-xl">Cookie preferensi</h2><p class="!mt-2 text-sm">Menyimpan pengaturan tampilan atau pilihan pengguna bila fitur tersebut digunakan. Saat ini fungsinya minimal.</p></div>
+      <label class="inline-flex cursor-pointer items-center gap-3 font-bold text-[#0b2820]"><input id="preferences-toggle" type="checkbox" class="h-5 w-5 accent-[#1d5744]" /> Aktif</label>
+    </section>
+    <section class="grid gap-4 py-6 sm:grid-cols-[1fr_auto] sm:items-center">
+      <div><h2 class="!mt-0 !text-xl">Cookie pemasaran</h2><p class="!mt-2 text-sm">Situs ini tidak mengaktifkan iklan personalisasi dan tidak menyediakan kategori pemasaran yang dapat dinyalakan.</p></div>
+      <div class="rounded-full bg-black/5 px-4 py-2 text-xs font-extrabold uppercase tracking-[.1em] text-black/55">Nonaktif</div>
+    </section>
+  </div>
+
+  <h2>Pengelolaan persetujuan</h2>
+  <p>Anda dapat menyimpan pilihan atau menolak semua kategori opsional. Menolak analitik tidak menghalangi akses ke panduan, peta, atau isi utama. Jika Anda mengaktifkan analitik setelah halaman dimuat, perubahan akan diterapkan sepenuhnya setelah pemuatan ulang halaman berikutnya.</p>
+  <div class="mt-7 flex flex-wrap gap-3">
+    <button id="save-cookie" type="button" class="focus-ring rounded-full bg-[#0b2820] px-6 py-3 text-sm font-extrabold text-white hover:bg-[#1d5744]">Simpan preferensi</button>
+    <button id="reject-cookie" type="button" class="focus-ring rounded-full border border-[#0b2820]/30 px-6 py-3 text-sm font-extrabold text-[#0b2820] hover:bg-white">Tolak semua yang opsional</button>
+  </div>
+
+  <h2>Menghapus pilihan</h2>
+  <p>Preferensi situs disimpan di penyimpanan lokal peramban dengan nama <code class="rounded bg-black/5 px-1.5 py-1 text-xs">tumpakSewuCookieConsent</code>. Anda juga dapat menghapus data situs melalui pengaturan peramban. Cookie yang dibuat pihak ketiga, bila pernah diizinkan, mungkin perlu dihapus melalui kontrol peramban atau penyedia terkait.</p>
+
+  <script is:inline>
+    (() => {
+      const key = 'tumpakSewuCookieConsent';
+      const analytics = document.getElementById('analytics-toggle');
+      const preferences = document.getElementById('preferences-toggle');
+      const status = document.getElementById('cookie-status');
+      const save = document.getElementById('save-cookie');
+      const reject = document.getElementById('reject-cookie');
+      const read = () => {
+        try { return JSON.parse(localStorage.getItem(key) || '{}'); } catch (_) { return {}; }
+      };
+      const render = () => {
+        const data = read();
+        analytics.checked = data.analytics === true;
+        preferences.checked = data.preferences === true;
+        if (Object.keys(data).length === 0) {
+          status.textContent = 'Belum ada pilihan opsional yang tersimpan. Analitik tidak dimuat sampai Anda mengaktifkannya.';
+        } else {
+          status.textContent = `Preferensi tersimpan — analitik: ${data.analytics ? 'aktif' : 'nonaktif'}, preferensi: ${data.preferences ? 'aktif' : 'nonaktif'}, pemasaran: nonaktif.`;
+        }
+      };
+      save.addEventListener('click', () => {
+        localStorage.setItem(key, JSON.stringify({ analytics: analytics.checked, preferences: preferences.checked, marketing: false, updated: '2026-08' }));
+        render();
+      });
+      reject.addEventListener('click', () => {
+        localStorage.setItem(key, JSON.stringify({ analytics: false, preferences: false, marketing: false, updated: '2026-08' }));
+        render();
+      });
+      render();
+    })();
+  </script>
+</LegalLayout>

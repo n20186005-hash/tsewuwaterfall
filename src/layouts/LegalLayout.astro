@@ -1,0 +1,26 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Logo from '../components/Logo.astro';
+interface Props { title: string; description: string; updated?: string; }
+const { title, description, updated = 'Agustus 2026' } = Astro.props;
+---
+<BaseLayout title={`${title} | Panduan Tumpak Sewu`} description={description}>
+  <header class="border-b border-black/10 bg-[#f6f4ed]">
+    <div class="section-shell flex items-center justify-between py-5">
+      <Logo />
+      <a href="/" class="focus-ring rounded-full border border-[#0b2820]/30 px-4 py-2 text-xs font-extrabold uppercase tracking-[.12em] text-[#0b2820] hover:bg-[#0b2820] hover:text-white">Kembali ke panduan</a>
+    </div>
+  </header>
+  <main>
+    <section class="bg-[#0b2820] text-white">
+      <div class="section-shell py-16 md:py-24">
+        <p class="eyebrow text-[#bde1dc]">Dokumen situs</p>
+        <h1 class="display mt-4 max-w-4xl text-5xl leading-[.95] md:text-7xl">{title}</h1>
+        <p class="mt-5 text-sm text-white/65">Terakhir diperbarui: {updated}</p>
+      </div>
+    </section>
+    <article class="legal-content section-shell max-w-4xl py-12 md:py-20">
+      <slot />
+    </article>
+  </main>
+</BaseLayout>
