@@ -28,10 +28,19 @@ pnpm dev
 Domain hanya dikonfigurasi pada satu tempat, yaitu konstanta `SITE` di `astro.config.mjs`.
 
 ```js
-const SITE = '';
+const SITE = 'https://tsewuwaterfall.com';
 ```
 
-Biarkan kosong selama domain belum ditetapkan. Dalam keadaan kosong, build tetap dapat berjalan, tag canonical dan URL Open Graph absolut tidak dipaksakan, JSON-LD tidak memakai domain contoh, dan integrasi sitemap tidak diaktifkan. Setelah domain tersedia, isi nilai tersebut dengan URL produksi lalu build ulang.
+Domain sudah aktif, sehingga `SITE` terisi. Akibatnya build menghasilkan tag `canonical` absolut, URL Open Graph absolut, dan `sitemap-index.xml` (`@astrojs/sitemap` aktif). `public/robots.txt` merujuk ke sitemap tersebut, dan `public/_headers` mengirim HSTS (`Strict-Transport-Security`) serta header keamanan lainnya.
+
+### Konsolidasi http/https (penting untuk SEO)
+
+Google memisahkan `http://` dan `https://` sebagai halaman berbeda bila tidak ada sinyal pemadatan. Selain `canonical` di atas, pastikan pengalihan 301 **http → https** aktif di Cloudflare:
+
+- Di dashboard Cloudflare, aktifkan **SSL/TLS → Edge Certificates → Always Use HTTPS**.
+- Tanpa `www` di situs ini, pengalihan `www → apex` tidak diperlukan.
+
+Header `Strict-Transport-Security` di `public/_headers` mengunci akses ke HTTPS setelah kunjungan pertama.
 
 ## Deploy Cloudflare Workers
 

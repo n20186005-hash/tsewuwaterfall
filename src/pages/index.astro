@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
+import { SITE_NAME } from '../data/site';
 
 const siteUrl = Astro.site?.href?.replace(/\/$/, '');
 const placeId = '0x2dd614085869da41:0x4a94cc5f06772982';
@@ -66,7 +67,7 @@ const faqSchema = {
 };
 ---
 <BaseLayout
-  title="Air Terjun Tumpak Sewu | Panduan Independen Pronojiwo, Lumajang"
+  title={`${SITE_NAME} | Tiket, jam buka, rute trekking, & FAQ`}
   description="Panduan independen Air Terjun Tumpak Sewu: lanskap, tiket, jam buka, jalur trekking, transportasi, parkir, fasilitas, penginapan, kuliner, keselamatan, peta, dan pertanyaan umum."
   schema={[attractionSchema, faqSchema]}
 >
