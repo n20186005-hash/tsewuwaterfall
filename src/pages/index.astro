@@ -1,16 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
-import { SITE_NAME } from '../data/site';
 
 const siteUrl = Astro.site?.href?.replace(/\/$/, '');
 const placeId = '0x2dd614085869da41:0x4a94cc5f06772982';
 const mapLink = 'https://maps.app.goo.gl/Jf85DUy2gXzMmAaU7';
-const mapEmbed = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7033.656594726803!2d112.91453187696844!3d-8.230937441801908!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd614085869da41%3A0x4a94cc5f06772982!2sTumpak%20Sewu%20Waterfall!5e1!3m2!1sid!2sid!4v1787032128026!5m2!1sid!2sid';
+const mapEmbed = 'https://maps.google.com/maps?q=-8.2314861,112.9176193&z=16&output=embed';
 
 const attractionSchema = {
   '@context': 'https://schema.org',
-  '@type': ['TouristAttraction', 'LocalBusiness'],
+  '@type': 'TouristAttraction',
   '@id': siteUrl ? `${siteUrl}/#tumpak-sewu` : `urn:google-place:${placeId}`,
   name: 'Air Terjun Tumpak Sewu',
   alternateName: ['Tumpak Sewu Waterfall', 'Coban Sewu'],
@@ -26,36 +25,51 @@ const attractionSchema = {
   },
   geo: {
     '@type': 'GeoCoordinates',
-    latitude: -8.230937441801908,
-    longitude: 112.91453187696844
+    latitude: -8.2314861,
+    longitude: 112.9176193
   },
-  openingHoursSpecification: [0,1,2,3,4,5,6].map((day) => ({
-    '@type': 'OpeningHoursSpecification',
-    dayOfWeek: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][day],
-    opens: '07:00',
-    closes: '15:00'
-  })),
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.8',
-    reviewCount: '9589',
-    bestRating: '5'
-  },
-  isAccessibleForFree: false,
-  sameAs: [mapLink]
+  hasMap: mapLink
 };
 
 const faqItems = [
-  { q: 'Apakah Tumpak Sewu cocok untuk pengunjung yang tidak ingin trekking berat?', a: 'Ya. Pengunjung dapat menikmati panorama dari area pandang tanpa turun ke dasar lembah. Jalur menuju dasar air terjun jauh lebih curam, basah, dan menuntut kondisi fisik yang baik.' },
-  { q: 'Jam berapa sebaiknya tiba?', a: 'Datang pada pagi hari memberi waktu lebih longgar untuk melihat kondisi cuaca dan menyelesaikan perjalanan sebelum operasional berakhir. Jam operasional yang tercantum di Google Maps saat penyusunan panduan adalah 07.00–15.00; tetap periksa kembali sebelum berangkat.' },
-  { q: 'Berapa tiket masuk untuk wisatawan domestik?', a: 'Pemerintah Kabupaten Lumajang mengumumkan tarif wisatawan domestik Rp20.000 per orang pada Maret 2025. Kebijakan tarif dapat berubah, terutama untuk wisatawan mancanegara, sehingga harga terkini sebaiknya dikonfirmasi melalui kanal resmi atau di loket.' },
-  { q: 'Apakah perlu pemandu?', a: 'Untuk melihat panorama dari atas, pemandu umumnya tidak diperlukan. Untuk turun ke dasar, pertimbangkan pendamping lokal bila belum terbiasa dengan jalur curam, licin, aliran air, atau kondisi lembah.' },
-  { q: 'Apa alas kaki yang paling aman?', a: 'Gunakan sepatu atau sandal trekking dengan daya cengkeram kuat. Hindari alas kaki bersol licin. Pengelola juga mengingatkan pengunjung untuk menyiapkan kondisi fisik, alas kaki yang sesuai, dan air minum yang cukup.' },
-  { q: 'Apakah tersedia toilet, parkir, makanan, dan tempat ibadah?', a: 'Daftar fasilitas pemerintah daerah mencakup parkir, toilet, pusat informasi, layanan kesehatan, area istirahat, mushola, rumah makan, pusat belanja, homestay, ojek wisata, jaringan telepon, tempat sampah, dan petunjuk arah.' },
-  { q: 'Apakah aman turun setelah hujan deras?', a: 'Jangan memaksakan turun ketika hujan deras, debit meningkat, atau petugas membatasi akses. Jalur lembah memiliki permukaan basah dan medan curam. Ikuti instruksi petugas di lokasi karena kondisi alam dapat berubah cepat.' },
-  { q: 'Berapa lama waktu kunjungan yang wajar?', a: 'Untuk panorama dan area atas, siapkan sekitar 1–2 jam. Jika turun ke dasar air terjun dan kembali naik, alokasikan sekitar 3–5 jam bergantung kondisi fisik, cuaca, antrean, dan kondisi jalur. Ini adalah estimasi perencanaan, bukan durasi resmi.' },
-  { q: 'Apakah ada pengisian kendaraan listrik di lokasi?', a: 'Panduan ini tidak menemukan konfirmasi resmi mengenai pengisi daya kendaraan listrik di kompleks air terjun. Jika menggunakan kendaraan listrik, rencanakan pengisian di kawasan perkotaan atau titik pengisian yang sudah terverifikasi sebelum menuju Pronojiwo.' }
+  {
+    "q": "Apa perbedaan panorama atas dan jalur lembah?",
+    "a": "Area panorama atas dan jalur menuju dasar lembah adalah pilihan akses yang berbeda. Izin atau tiket untuk satu area tidak otomatis berlaku untuk yang lain. Tanyakan bagian yang sedang dibuka dan kondisi pijakan kepada petugas; panduan ini tidak menjamin jalur lembah dapat dimasuki."
+  },
+  {
+    "q": "Kapan jam buka Tumpak Sewu?",
+    "a": "Maps yang diperiksa 19 Oktober 2026 mencantumkan 07.00–15.00 setiap hari (WIB). Ini catatan pihak ketiga bertanggal, bukan jaminan operasi hari libur, waktu masuk terakhir, atau akses semua area. Konfirmasikan ke lokasi sebelum berangkat."
+  },
+  {
+    "q": "Berapa harga tiket masuk sekarang?",
+    "a": "Tarif berlaku saat ini belum terverifikasi. Berita Pemkab Lumajang 2 Februari 2026 membahas pungutan tetapi tidak menyebut angka tarif yang bisa dipakai sebagai harga terkini. Tanyakan kategori pengunjung, area yang tercakup, biaya parkir dan layanan pemandu di loket sebelum membayar."
+  },
+  {
+    "q": "Apakah satu tiket mencakup semua pintu dan area?",
+    "a": "Jangan menganggap demikian. Kesepakatan pemerintah 24 Desember 2024 merupakan catatan historis dan masih membahas koordinasi pungutan di kawasan lembah sisi Malang. Itu bukan jaminan bahwa semua area atau pintu masuk telah memakai satu tarif pada 2026."
+  },
+  {
+    "q": "Apakah pemandu wajib dan berapa biayanya?",
+    "a": "Kewajiban, layanan dan biaya pemandu untuk rute tertentu belum diverifikasi. Tanyakan kepada petugas untuk area yang benar-benar akan dikunjungi, beserta biaya dan cakupannya. Kehadiran pemandu tidak menggantikan penutupan atau batas akses."
+  },
+  {
+    "q": "Bagaimana merencanakan kunjungan saat cuaca berubah?",
+    "a": "Periksa prakiraan cuaca dan pengumuman di lokasi. Hujan, aliran air dan pijakan basah dapat memengaruhi rute; ikuti pembatasan petugas dan jangan memaksakan turun. Jam yang tercantum di Maps tidak berarti jalur lembah atau sungai selalu boleh dimasuki."
+  },
+  {
+    "q": "Apakah boleh berenang atau menyusuri sungai?",
+    "a": "Panduan ini tidak mengonfirmasi izin atau keamanan berenang dan susur sungai. Jangan menganggap aliran air sebagai area berenang; ikuti batas dan arahan petugas di lokasi."
+  },
+  {
+    "q": "Apakah tersedia toilet, parkir dan akses tanpa tangga?",
+    "a": "Lokasi, ketersediaan, biaya dan kondisi fasilitas pada hari kunjungan belum diverifikasi. Tanyakan kepada petugas atau operator terkait sebelum mengandalkannya, termasuk kondisi tangga dan kebutuhan mobilitas."
+  },
+  {
+    "q": "Berapa lama sebaiknya menyiapkan waktu?",
+    "a": "Tidak ada durasi tetap yang dijamin di panduan ini. Sesuaikan dengan area yang diizinkan, cuaca, mobilitas, perjalanan kembali dan waktu tutup yang telah dikonfirmasi. Rencana turun ke lembah harus dikonfirmasi terpisah dari kunjungan panorama."
+  }
 ];
+
 const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
@@ -67,8 +81,8 @@ const faqSchema = {
 };
 ---
 <BaseLayout
-  title={`${SITE_NAME} | Tiket, jam buka, rute trekking, & FAQ`}
-  description="Panduan independen Air Terjun Tumpak Sewu: lanskap, tiket, jam buka, jalur trekking, transportasi, parkir, fasilitas, penginapan, kuliner, keselamatan, peta, dan pertanyaan umum."
+  title="Tumpak Sewu Lumajang: Lokasi, Rute & Akses Kunjungan"
+  description="Panduan independen Tumpak Sewu di Sidomulyo, Lumajang: lokasi, beda panorama dan jalur lembah, cuaca, jam Maps bertanggal, serta konfirmasi tiket dan akses."
   schema={[attractionSchema, faqSchema]}
 >
   <Header />
@@ -85,16 +99,17 @@ const faqSchema = {
           </div>
           <h1 class="display text-[clamp(4.4rem,13vw,10.5rem)] leading-[.7] tracking-[-.065em]">Tumpak<br /><span class="ml-[.16em] text-[#bde1dc]">Sewu</span></h1>
           <div class="mt-10 grid max-w-3xl gap-5 border-t border-white/30 pt-6 sm:grid-cols-[1.3fr_.7fr]">
-            <p class="max-w-xl text-lg leading-8 text-white/82">Bukan satu jatuhan air, melainkan tirai berlapis yang mengelilingi dinding lembah di kaki Semeru. Panduan ini membantu Anda memilih pengalaman yang sesuai kemampuan—dari panorama atas hingga lembah yang menuntut fisik.</p>
+            <p class="max-w-xl text-lg leading-8 text-white/82">Panduan independen untuk Air Terjun Tumpak Sewu di Sidomulyo, Pronojiwo, Lumajang. Bedakan kunjungan panorama atas dari jalur lembah; konfirmasikan cuaca, area yang diizinkan dan ketentuan sebelum berangkat.</p>
             <div class="sm:text-right">
-              <p class="display text-3xl text-[#bde1dc]">±120 m</p>
-              <p class="mt-1 text-xs font-bold uppercase tracking-[.18em] text-white/55">ketinggian lanskap air terjun</p>
+              <p class="display text-3xl text-[#bde1dc]">Panorama / lembah</p>
+              <p class="mt-1 text-xs font-bold uppercase tracking-[.18em] text-white/55">dua cakupan akses berbeda</p>
             </div>
           </div>
         </div>
       </div>
+      <a href="https://www.pexels.com/id-id/foto/pemandangan-lanskap-lansekap-hutan-10562473/" target="_blank" rel="noopener noreferrer" class="absolute bottom-12 left-6 z-20 text-xs text-white/80">Foto: Jagad Lanang / Pexels</a>
       <div class="absolute bottom-24 right-0 hidden rotate-90 origin-bottom-right items-center gap-4 text-[.62rem] font-extrabold uppercase tracking-[.3em] text-white/60 xl:flex">
-        <span>8,2309° LS</span><span class="h-px w-16 bg-white/40"></span><span>112,9145° BT</span>
+        <span>8,2315° LS</span><span class="h-px w-16 bg-white/40"></span><span>112,9176° BT</span>
       </div>
     </section>
 
@@ -104,12 +119,12 @@ const faqSchema = {
           <div class="border-b border-black/10 p-6 md:border-r xl:border-b-0">
             <p class="eyebrow text-[#1d5744]">Jam kunjungan</p>
             <p class="display mt-4 text-4xl text-[#0b2820]">07.00–15.00</p>
-            <p class="mt-3 text-sm leading-6 text-black/55">Mengikuti data Google Maps saat panduan disusun. Kondisi cuaca atau operasional dapat mengubah akses.</p>
+            <p class="mt-3 text-sm leading-6 text-black/55">Catatan Google Maps diperiksa 19 Oktober 2026, tujuh hari 07.00–15.00 (WIB). Konfirmasikan jam dan area yang dibuka; ini bukan jaminan semua rute dapat diakses.</p>
           </div>
           <div class="border-b border-black/10 p-6 xl:border-b-0 xl:border-r">
-            <p class="eyebrow text-[#1d5744]">Tiket domestik</p>
-            <p class="display mt-4 text-4xl text-[#0b2820]">Rp20.000</p>
-            <p class="mt-3 text-sm leading-6 text-black/55">Tarif yang diumumkan Pemkab Lumajang pada Maret 2025. Wisman sebaiknya mengecek tarif terbaru.</p>
+            <p class="eyebrow text-[#1d5744]">Tiket & cakupan</p>
+            <p class="display mt-4 text-4xl text-[#0b2820]">Konfirmasi di loket</p>
+            <p class="mt-3 text-sm leading-6 text-black/55">Tarif terkini belum terverifikasi. Pastikan kategori pengunjung, area yang tercakup, parkir dan layanan pemandu sebelum membayar.</p>
           </div>
           <div class="border-b border-black/10 p-6 md:border-r md:border-b-0">
             <p class="eyebrow text-[#1d5744]">Waktu terbaik</p>
@@ -118,54 +133,15 @@ const faqSchema = {
           </div>
           <div class="p-6">
             <p class="eyebrow text-[#1d5744]">Waktu kunjungan</p>
-            <p class="display mt-4 text-4xl text-[#0b2820]">1–5 jam</p>
-            <p class="mt-3 text-sm leading-6 text-black/55">Sekitar 1–2 jam untuk area atas; 3–5 jam bila turun dan kembali dari dasar, tergantung kondisi.</p>
+            <p class="display mt-4 text-4xl text-[#0b2820]">Sesuai kondisi</p>
+            <p class="mt-3 text-sm leading-6 text-black/55">Sesuaikan waktu dengan area yang diizinkan, cuaca, mobilitas dan perjalanan kembali; jangan menganggap jalur lembah terbuka.</p>
           </div>
         </div>
-        <p class="mt-5 text-xs leading-5 text-black/50">Catatan: tarif, jam, akses jalur, dan penilaian daring bersifat dinamis. Periksa kondisi aktual sebelum perjalanan.</p>
+        <p class="mt-5 text-xs leading-5 text-black/50">Maps diperiksa 19 Oktober 2026: 4,8/5 dari 9.921 ulasan. Penilaian pihak ketiga ini bukan penilaian dari panduan kami. Tarif, jam dan akses dapat berubah; konfirmasikan kondisi hari kunjungan.</p>
       </div>
     </section>
 
-    <section id="kisah" class="overflow-hidden bg-[#0b2820] text-white">
-      <div class="topographic section-shell grid gap-16 py-24 md:py-32 lg:grid-cols-[.8fr_1.2fr]">
-        <div>
-          <p class="section-number">01</p>
-          <p class="eyebrow mt-8 text-[#bde1dc]">Membaca lanskap</p>
-          <h2 class="display mt-5 text-5xl leading-[.95] md:text-7xl">Seribu air,<br />satu dinding hijau.</h2>
-        </div>
-        <div class="grid gap-9 self-end md:grid-cols-2">
-          <div class="border-t border-white/20 pt-5">
-            <h3 class="text-lg font-extrabold">Nama yang menggambarkan bentuk</h3>
-            <p class="mt-3 text-sm leading-7 text-white/68">Dalam penjelasan Pemerintah Kabupaten Lumajang, nama Tumpak Sewu merujuk pada banyaknya aliran air yang bertumpuk dan membentuk satu panorama besar. Dalam pemakaian Jawa, nama ini kerap dipahami sebagai gambaran “seribu” jatuhan air—bukan hitungan literal.</p>
-          </div>
-          <div class="border-t border-white/20 pt-5">
-            <h3 class="text-lg font-extrabold">Di lereng Semeru</h3>
-            <p class="mt-3 text-sm leading-7 text-white/68">Air terjun berada di Desa Sidomulyo, Kecamatan Pronojiwo. Pemerintah daerah menggambarkan sumber airnya berasal dari kawasan Gunung Semeru, membentuk dinding air di lembah yang juga terhubung dengan lanskap Sungai Glidik.</p>
-          </div>
-          <div class="border-t border-white/20 pt-5">
-            <h3 class="text-lg font-extrabold">Ketinggian sekitar 120 meter</h3>
-            <p class="mt-3 text-sm leading-7 text-white/68">Sumber pariwisata nasional dan desa setempat sama-sama menyebut ketinggian sekitar 120 meter. Bentuk setengah lingkaran membuat panorama terasa seperti tirai air yang membentang, bukan air terjun tunggal yang sempit.</p>
-          </div>
-          <div class="border-t border-white/20 pt-5">
-            <h3 class="text-lg font-extrabold">Cerita, bukan legenda yang dipaksakan</h3>
-            <p class="mt-3 text-sm leading-7 text-white/68">Dalam sumber pemerintah yang kami telusuri, tidak ditemukan satu legenda asal-usul yang terdokumentasi secara kuat. Karena itu panduan ini tidak mengarang mitos: cerita utamanya adalah hubungan nama, bentang air, masyarakat Sidomulyo, dan kaki Semeru.</p>
-          </div>
-        </div>
-      </div>
-      <div class="grid md:grid-cols-[1.25fr_.75fr]">
-        <figure class="relative min-h-[480px] overflow-hidden">
-          <img src="/images/tumpak-sewu-panorama.webp" alt="Panorama lebar Tumpak Sewu dengan deretan air jatuh di tebing hijau" class="absolute inset-0 h-full w-full object-cover" width="1800" height="1200" loading="lazy" />
-          <figcaption class="absolute bottom-4 left-4 rounded-full bg-black/45 px-3 py-1.5 text-[.65rem] text-white/80 backdrop-blur">Foto nyata Tumpak Sewu · Timur Kozmenko / Pexels</figcaption>
-        </figure>
-        <div class="flex items-center bg-[#bd6843] p-8 text-[#071a16] md:p-12">
-          <div>
-            <p class="eyebrow">Sudut pandang editorial</p>
-            <p class="display mt-5 text-4xl leading-tight md:text-5xl">Keindahan Tumpak Sewu tidak terpisah dari tenaga air, tebing basah, dan risiko lembahnya.</p>
-            <p class="mt-5 text-sm font-medium leading-7">Foto yang dramatis sebaiknya tidak membuat pengunjung menganggap jalur ke dasar sebagai lintasan ringan.</p>
-          </div>
-        </div>
-      </div>
-    </section>
+    <section id="kisah" class="overflow-hidden bg-[#0b2820] text-white"><div class="section-shell grid gap-12 py-24 lg:grid-cols-2"><div><p class="eyebrow text-[#bde1dc]">Sidomulyo · Pronojiwo</p><h2 class="display mt-5 text-5xl md:text-7xl">Lanskap yang perlu dibaca per area.</h2></div><div class="space-y-6 text-sm leading-8 text-white/70"><p>Lokasi pada panduan ini adalah Tumpak Sewu di Desa Sidomulyo, Kecamatan Pronojiwo, Kabupaten Lumajang. Gunakan alamat dan pin yang sesuai dengan titik tujuan Anda; nama destinasi saja tidak menjelaskan seluruh pintu atau cakupan tiket.</p><p>Panorama atas, jalur turun, dasar lembah dan aliran sungai tidak boleh diperlakukan sebagai satu area dengan izin otomatis yang sama. Ikuti penanda dan arahan petugas, termasuk ketika hanya sebagian kawasan dapat dikunjungi.</p><p>Foto membantu mengenali lanskap, tetapi tidak menunjukkan bahwa jalur tertentu sedang terbuka. Periksa informasi cuaca dan kondisi saat akan berangkat.</p></div></div><figure class="relative h-[440px] md:h-[560px]"><img src="/images/tumpak-sewu-panorama.webp" alt="Panorama Tumpak Sewu di antara tebing hijau" class="h-full w-full object-cover" width="1800" height="1200" loading="lazy"/><figcaption class="absolute bottom-4 left-4 rounded-full bg-black/60 px-3 py-2 text-xs text-white">Foto: <a href="https://www.pexels.com/photo/high-angle-shot-of-a-rainforest-waterfall-7064356/">Timur Kozmenko / Pexels</a> · bukan konfirmasi akses hari ini</figcaption></figure></section>
 
     <section id="rute" class="bg-[#f6f4ed] py-24 md:py-32">
       <div class="section-shell">
@@ -173,26 +149,26 @@ const faqSchema = {
           <div>
             <p class="eyebrow text-[#1d5744]">Pilih pengalaman</p>
             <h2 class="display mt-5 text-5xl leading-[.95] text-[#0b2820] md:text-7xl">Dua cara membaca Tumpak Sewu.</h2>
-            <p class="mt-6 max-w-lg text-base leading-8 text-black/60">Tidak semua orang perlu turun ke dasar. Pilih berdasarkan kebugaran, cuaca, kondisi jalur, dan waktu yang tersedia.</p>
+            <p class="mt-6 max-w-lg text-base leading-8 text-black/60">Tentukan area yang ingin dilihat, kemudian tanyakan apakah area dan jalur tersebut boleh dimasuki pada hari kunjungan. Rencana panorama tidak otomatis mencakup lembah.</p>
           </div>
           <div class="grid gap-5 md:grid-cols-2">
             <article class="rounded-[2rem] border border-black/10 bg-white p-7">
-              <div class="flex items-center justify-between"><span class="eyebrow text-[#688b58]">Rute A</span><span class="rounded-full bg-[#e8efe5] px-3 py-1 text-xs font-bold text-[#1d5744]">Lebih ringan</span></div>
+              <div class="flex items-center justify-between"><span class="eyebrow text-[#688b58]">Rute A</span><span class="rounded-full bg-[#e8efe5] px-3 py-1 text-xs font-bold text-[#1d5744]">Periksa akses</span></div>
               <h3 class="display mt-8 text-4xl text-[#0b2820]">Panorama atas</h3>
-              <p class="mt-4 text-sm leading-7 text-black/60">Dari area parkir, akses kendaraan berhenti lalu perjalanan dilanjutkan dengan berjalan kaki menuju titik pandang. Cocok bagi keluarga atau pengunjung yang tidak ingin menempuh tebing curam.</p>
+              <p class="mt-4 text-sm leading-7 text-black/60">Konfirmasikan titik masuk, kondisi jalan kaki, tangga dan pembatas menuju area panorama. Jangan menganggap semua titik pandang terbuka atau bebas hambatan untuk setiap kebutuhan mobilitas.</p>
               <ul class="mt-6 space-y-3 text-sm text-black/70">
                 <li class="flex gap-3"><span class="text-[#bd6843]">●</span><span>Fokus pada komposisi tirai air dan lembah.</span></li>
-                <li class="flex gap-3"><span class="text-[#bd6843]">●</span><span>Estimasi kunjungan sekitar 1–2 jam.</span></li>
+                <li class="flex gap-3"><span class="text-[#bd6843]">●</span><span>Sesuaikan durasi dengan akses yang benar-benar diizinkan.</span></li>
                 <li class="flex gap-3"><span class="text-[#bd6843]">●</span><span>Tetap waspadai permukaan basah dan pembatas.</span></li>
               </ul>
             </article>
             <article class="rounded-[2rem] bg-[#0b2820] p-7 text-white">
               <div class="flex items-center justify-between"><span class="eyebrow text-[#bde1dc]">Rute B</span><span class="rounded-full bg-[#bd6843] px-3 py-1 text-xs font-bold text-white">Menuntut fisik</span></div>
               <h3 class="display mt-8 text-4xl">Turun ke lembah</h3>
-              <p class="mt-4 text-sm leading-7 text-white/65">Jalur menuju dasar Sungai Glidik adalah pengalaman petualangan. Pemerintah daerah menekankan bahwa perjalanan kembali naik membutuhkan tenaga; siapkan fisik, alas kaki yang tepat, dan air minum.</p>
+              <p class="mt-4 text-sm leading-7 text-white/65">Rute lembah perlu konfirmasi terpisah mengenai status buka, cuaca, pijakan dan perjalanan kembali. Jangan turun berdasarkan foto atau jam Maps saja; pembatasan petugas berlaku meski area panorama dibuka.</p>
               <ul class="mt-6 space-y-3 text-sm text-white/75">
                 <li class="flex gap-3"><span class="text-[#bde1dc]">●</span><span>Curam, basah, licin, dan dapat bersinggungan dengan aliran air.</span></li>
-                <li class="flex gap-3"><span class="text-[#bde1dc]">●</span><span>Estimasi total sekitar 3–5 jam.</span></li>
+                <li class="flex gap-3"><span class="text-[#bde1dc]">●</span><span>Jangan menganggap akses lembah mencakup izin memasuki sungai.</span></li>
                 <li class="flex gap-3"><span class="text-[#bde1dc]">●</span><span>Jangan turun bila petugas membatasi akses.</span></li>
               </ul>
             </article>
@@ -201,7 +177,7 @@ const faqSchema = {
         <div class="mt-12 grid overflow-hidden rounded-[2rem] bg-[#dfe8db] lg:grid-cols-[.9fr_1.1fr]">
           <figure class="relative min-h-[460px]">
             <img src="/images/tumpak-sewu-visitor.webp" alt="Pengunjung memandang Air Terjun Tumpak Sewu dari area hijau" class="absolute inset-0 h-full w-full object-cover" width="1800" height="2400" loading="lazy" />
-            <figcaption class="absolute bottom-4 left-4 rounded-full bg-black/45 px-3 py-1.5 text-[.65rem] text-white/80 backdrop-blur">Foto nyata Tumpak Sewu · Iqbal Kurniawan / Pexels</figcaption>
+            <figcaption class="absolute bottom-4 left-4 rounded-full bg-black/45 px-3 py-1.5 text-[.65rem] text-white/80 backdrop-blur">Foto Tumpak Sewu · <a href="https://www.pexels.com/photo/man-facing-waterfalls-2865715/">Iqbal Kurniawan / Pexels</a></figcaption>
           </figure>
           <div class="p-8 md:p-12">
             <p class="eyebrow text-[#1d5744]">Keselamatan sebelum estetika</p>
@@ -217,27 +193,16 @@ const faqSchema = {
       </div>
     </section>
 
-    <section id="biaya" class="bg-[#d9d5c9] py-24 md:py-28">
-      <div class="section-shell">
-        <div class="grid gap-12 lg:grid-cols-[.7fr_1.3fr]">
-          <div><p class="section-number !text-black/8">02</p><p class="eyebrow mt-7 text-[#1d5744]">Tiket, biaya, parkir</p><h2 class="display mt-4 text-5xl text-[#0b2820]">Bedakan tarif resmi dari biaya perjalanan.</h2></div>
-          <div class="grid gap-5 md:grid-cols-2">
-            <div class="rounded-[1.5rem] bg-[#f6f4ed] p-6"><p class="eyebrow text-[#688b58]">Tiket wisatawan domestik</p><p class="display mt-4 text-5xl text-[#0b2820]">Rp20.000</p><p class="mt-4 text-sm leading-7 text-black/60">Pemkab Lumajang mengumumkan penyesuaian tarif ini pada Maret 2025. Kesepakatan pengelolaan 2025 juga diarahkan agar tidak ada penarikan tiket tambahan di dasar dari dua pintu masuk utama.</p></div>
-            <div class="rounded-[1.5rem] bg-[#0b2820] p-6 text-white"><p class="eyebrow text-[#bde1dc]">Wisman & biaya lain</p><p class="display mt-4 text-4xl">Konfirmasi sebelum masuk</p><p class="mt-4 text-sm leading-7 text-white/65">Tarif wisatawan mancanegara dan biaya parkir dapat berubah. Kami tidak mencantumkan angka yang tidak terverifikasi sebagai tarif resmi. Bawa rupiah dalam pecahan wajar untuk transaksi lokal.</p></div>
-            <div class="md:col-span-2 rounded-[1.5rem] border border-black/15 p-6"><h3 class="font-extrabold text-[#0b2820]">Parkir</h3><p class="mt-3 text-sm leading-7 text-black/60">Sumber pemerintah daerah mengonfirmasi keberadaan area parkir dan akses jalan beraspal untuk kendaraan roda dua dan roda empat sampai area parkir. Jangan mengasumsikan tarif parkir dari blog lama; cek papan tarif di lokasi. Simpan barang berharga bersama Anda dan ikuti arahan petugas.</p></div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <section id="biaya" class="bg-[#d9d5c9] py-24"><div class="section-shell grid gap-10 lg:grid-cols-2"><div><p class="eyebrow text-[#1d5744]">Biaya & cakupan</p><h2 class="display mt-5 text-5xl text-[#0b2820]">Tanyakan apa yang termasuk sebelum membayar.</h2></div><div class="space-y-6 text-sm leading-8 text-black/65"><p>Berita Pemkab Lumajang <a href="https://lumajangkab.go.id/berita-opd/detail/6795" class="underline">2 Februari 2026</a> membahas pungutan di Tumpak Sewu tanpa memberikan angka yang dapat dipakai sebagai tarif terkini. Panduan ini tidak menetapkan harga masuk, biaya pemandu atau tarif parkir.</p><p><a href="https://lumajangkab.go.id/berita-opd/detail/4222" class="underline">Kesepakatan 24 Desember 2024</a> adalah catatan historis dan masih memuat koordinasi pungutan kawasan lembah sisi Malang. Jangan menafsirkannya sebagai jaminan bahwa seluruh pintu dan area telah memakai satu tarif pada 2026.</p><ul class="list-disc space-y-3 pl-5"><li>Konfirmasikan kategori pengunjung dan area yang termasuk dalam tiket.</li><li>Tanyakan biaya parkir serta layanan pemandu, apakah diwajibkan untuk rute yang dipilih, dan apa cakupannya.</li><li>Simpan informasi transaksi; tiket atau pemandu tidak menggantikan penutupan maupun batas akses petugas.</li></ul></div></div></section>
 
     <section id="transportasi" class="bg-[#f6f4ed] py-24 md:py-32">
       <div class="section-shell">
-        <div class="max-w-4xl"><p class="eyebrow text-[#1d5744]">Transportasi terperinci</p><h2 class="display mt-5 text-5xl leading-[.95] text-[#0b2820] md:text-7xl">Tujuan akhirnya: Pronojiwo.</h2><p class="mt-6 text-base leading-8 text-black/60">Tumpak Sewu berada di koridor jalan Dampit–Lumajang. Angkutan umum antarkota dapat membawa Anda mendekati Lumajang atau Malang, tetapi sambungan terakhir ke desa wisata perlu direncanakan lebih teliti.</p></div>
+        <div class="max-w-4xl"><p class="eyebrow text-[#1d5744]">Transportasi terperinci</p><h2 class="display mt-5 text-5xl leading-[.95] text-[#0b2820] md:text-7xl">Tujuan akhirnya: Pronojiwo.</h2><p class="mt-6 text-base leading-8 text-black/60">Tujuan pada peta adalah Sidomulyo, Pronojiwo, di koridor Dampit–Lumajang. Konfirmasikan rute, titik turun, sambungan terakhir dan perjalanan pulang kepada operator; jangan menganggap ada layanan langsung pada tanggal perjalanan Anda.</p></div>
         <div class="mt-12 grid gap-x-8 lg:grid-cols-2">
-          <article class="detail-card py-7"><div class="flex gap-5"><span class="display text-4xl text-[#bd6843]">01</span><div><h3 class="text-xl font-extrabold">Dari bandara</h3><p class="mt-3 text-sm leading-7 text-black/60"><strong>Bandara Abdul Rachman Saleh, Malang:</strong> lanjutkan dengan taksi, kendaraan sewaan, atau angkutan menuju kawasan Malang selatan/Dampit lalu Pronojiwo. <strong>Bandara Internasional Juanda, Surabaya:</strong> masuk ke jaringan bus/kereta menuju Malang atau Lumajang, lalu sambung transportasi darat lokal. Jadwal penerbangan dan angkutan berubah; verifikasi pada hari perjalanan.</p></div></div></article>
-          <article class="detail-card py-7"><div class="flex gap-5"><span class="display text-4xl text-[#bd6843]">02</span><div><h3 class="text-xl font-extrabold">Bus & angkutan umum</h3><p class="mt-3 text-sm leading-7 text-black/60">Gunakan bus antarkota menuju Lumajang atau Malang. Dokumen transportasi daerah mencatat keberadaan Terminal Pronojiwo, tetapi frekuensi dan pola sambungan lokal dapat terbatas. Tanyakan rute aktif ke Pronojiwo pada terminal resmi, lalu lanjutkan dengan angkutan lokal atau ojek wisata bila tersedia.</p></div></div></article>
-          <article class="detail-card py-7"><div class="flex gap-5"><span class="display text-4xl text-[#bd6843]">03</span><div><h3 class="text-xl font-extrabold">Taksi, kendaraan dengan pengemudi</h3><p class="mt-3 text-sm leading-7 text-black/60">Pilihan ini paling sederhana untuk kelompok kecil atau jadwal pagi. Pastikan tarif, titik tunggu, durasi sewa, dan biaya parkir disepakati sebelum berangkat. Situs ini tidak menunjuk operator tertentu dan tidak menerima komisi perjalanan.</p></div></div></article>
-          <article class="detail-card py-7"><div class="flex gap-5"><span class="display text-4xl text-[#bd6843]">04</span><div><h3 class="text-xl font-extrabold">Kendaraan pribadi</h3><p class="mt-3 text-sm leading-7 text-black/60">Masukkan alamat lengkap Sidomulyo, Pronojiwo, bukan hanya nama “Tumpak Sewu”, lalu ikuti akses resmi menuju area parkir. Jalan beraspal dapat dilalui motor dan mobil hingga parkir; setelah itu perjalanan diteruskan berjalan kaki.</p></div></div></article>
+          <article class="detail-card py-7"><div class="flex gap-5"><span class="display text-4xl text-[#bd6843]">01</span><div><h3 class="text-xl font-extrabold">Dari bandara</h3><p class="mt-3 text-sm leading-7 text-black/60">Jika datang melalui bandara, periksa penerbangan dan sambungan darat yang benar-benar tersedia pada tanggal perjalanan. Sepakati tujuan Sidomulyo, titik turun, ongkos dan perjalanan pulang; tidak ada jadwal atau layanan langsung yang dijamin di sini.</p></div></div></article>
+          <article class="detail-card py-7"><div class="flex gap-5"><span class="display text-4xl text-[#bd6843]">02</span><div><h3 class="text-xl font-extrabold">Bus & angkutan umum</h3><p class="mt-3 text-sm leading-7 text-black/60">Tanyakan kepada operator mengenai rute yang beroperasi menuju Pronojiwo, terminal tujuan, jadwal terakhir dan sambungan ke titik masuk yang dipilih. Konfirmasikan juga perjalanan kembali; tarif dan frekuensi belum diverifikasi panduan ini.</p></div></div></article>
+          <article class="detail-card py-7"><div class="flex gap-5"><span class="display text-4xl text-[#bd6843]">03</span><div><h3 class="text-xl font-extrabold">Taksi, kendaraan dengan pengemudi</h3><p class="mt-3 text-sm leading-7 text-black/60">Jika memilih kendaraan dengan pengemudi, pastikan tujuan, tarif, titik tunggu, durasi sewa dan biaya parkir disepakati sebelum berangkat. Situs ini tidak menunjuk operator tertentu dan tidak menerima komisi perjalanan.</p></div></div></article>
+          <article class="detail-card py-7"><div class="flex gap-5"><span class="display text-4xl text-[#bd6843]">04</span><div><h3 class="text-xl font-extrabold">Kendaraan pribadi</h3><p class="mt-3 text-sm leading-7 text-black/60">Masukkan alamat Sidomulyo, Pronojiwo dan pin tujuan yang sesuai. Konfirmasikan kondisi jalan, titik parkir dan area turun penumpang; ikuti rambu dan jangan menutup akses jalan atau layanan darurat.</p></div></div></article>
         </div>
         <div class="mt-8 rounded-[2rem] bg-[#bd6843] p-7 text-[#071a16] md:p-9"><p class="eyebrow">Prinsip penting</p><p class="display mt-3 text-3xl md:text-4xl">Jangan menyusun koneksi transportasi terlalu ketat.</p><p class="mt-3 max-w-4xl text-sm font-medium leading-7">Jalan pegunungan, cuaca, pekerjaan jalan, dan frekuensi angkutan lokal dapat mengubah waktu tempuh. Sisakan jeda terutama bila Anda harus mengejar penerbangan, kereta, atau bus antarkota.</p></div>
       </div>
@@ -245,22 +210,9 @@ const faqSchema = {
 
     <section id="fasilitas" class="bg-[#0b2820] py-24 text-white md:py-32">
       <div class="section-shell">
-        <div class="grid gap-12 lg:grid-cols-[.8fr_1.2fr]"><div><p class="eyebrow text-[#bde1dc]">Fasilitas & kebutuhan praktis</p><h2 class="display mt-5 text-5xl leading-[.95] md:text-7xl">Apa yang ada. Apa yang perlu disiapkan.</h2></div><p class="self-end max-w-xl text-base leading-8 text-white/62">Daftar fasilitas dasar mengacu pada publikasi Pemerintah Kabupaten Lumajang. Untuk kebutuhan yang lebih khusus—terutama ATM, obat tertentu, atau pengisian kendaraan listrik—lebih aman menyelesaikannya sebelum tiba di area air terjun.</p></div>
+        <div class="grid gap-12 lg:grid-cols-[.8fr_1.2fr]"><div><p class="eyebrow text-[#bde1dc]">Fasilitas & kebutuhan praktis</p><h2 class="display mt-5 text-5xl leading-[.95] md:text-7xl">Apa yang perlu dikonfirmasi.</h2></div><p class="self-end max-w-xl text-base leading-8 text-white/62">Ketersediaan fasilitas dan layanan saat ini belum diverifikasi. Gunakan daftar berikut sebagai pertanyaan untuk petugas atau operator, bukan jaminan bahwa setiap layanan tersedia di lokasi.</p></div>
         <div class="mt-12 grid gap-px overflow-hidden rounded-[2rem] bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            ['Toilet / WC','Tersedia menurut daftar fasilitas pemerintah. Bawa tisu dan perlengkapan pribadi sebagai cadangan.'],
-            ['Parkir','Area parkir tersedia; akses kendaraan berhenti di sini sebelum pengunjung berjalan kaki.'],
-            ['Makan & minum','Tersedia rumah makan/warung. Pilih tempat yang bersih dan sediakan air minum untuk trekking.'],
-            ['Mushola','Tempat ibadah tercantum dalam fasilitas resmi kawasan.'],
-            ['Informasi','Pusat informasi dan petunjuk arah tercantum sebagai fasilitas kawasan.'],
-            ['Kesehatan','Layanan kesehatan dasar tercantum; untuk kondisi serius, rencanakan akses ke fasilitas kesehatan kecamatan/kabupaten.'],
-            ['Sinyal seluler','Jaringan telepon tercantum tersedia, tetapi kualitas sinyal dapat berubah di lembah. Simpan peta penting secara luring.'],
-            ['Penginapan','Homestay tersedia di kawasan. Pilih berdasarkan kebersihan, akses, dan kebutuhan pribadi, bukan promosi situs ini.'],
-            ['Belanja harian','Pusat belanja/warung tersedia; untuk kebutuhan lebih lengkap gunakan toko kelontong, pasar, atau minimarket di kawasan permukiman Pronojiwo.'],
-            ['Bahan bakar','Isi bahan bakar sebelum memasuki rute yang lebih sepi. Gunakan SPBU atau penjual resmi yang mudah diverifikasi di koridor perjalanan.'],
-            ['Pengisian listrik','Tidak ada konfirmasi resmi yang kami temukan tentang pengisi daya kendaraan listrik di kompleks air terjun. Isi daya sebelum menuju Pronojiwo.'],
-            ['Sampah & kebersihan','Tempat sampah tercantum tersedia. Bawa kembali sampah bila tempat penampungan penuh; jangan meninggalkan plastik di jalur.']
-          ].map(([title,text]) => <article class="bg-[#123b30] p-6"><h3 class="font-extrabold text-[#f2f5ee]">{title}</h3><p class="mt-3 text-sm leading-7 text-white/58">{text}</p></article>)}
+          {[["Toilet / WC", "Tanyakan lokasi, kondisi dan jam toilet kepada petugas sebelum mengandalkannya."], ["Parkir", "Konfirmasikan area, tarif dan aturan parkir yang berlaku pada hari kunjungan."], ["Makan & minum", "Periksa lokasi dan jam tempat makan bila diperlukan; siapkan kebutuhan minum pribadi."], ["Tempat ibadah", "Tanyakan lokasi dan akses yang tersedia; fasilitas harian belum diverifikasi di sini."], ["Informasi", "Cari pengumuman dan petugas untuk status area serta jalur yang boleh dikunjungi."], ["Kebutuhan khusus", "Jika memerlukan obat atau bantuan tertentu, rencanakan melalui penyedia yang telah dikonfirmasi sebelum perjalanan."], ["Sinyal seluler", "Jangan bergantung pada sinyal di setiap area; siapkan informasi perjalanan secara luring."], ["Penginapan", "Jika menginap, periksa langsung lokasi, akses, jam dan ketentuan penyedia."], ["Belanja harian", "Siapkan perlengkapan sebelum perjalanan atau konfirmasikan toko yang benar-benar buka di rute Anda."], ["Bahan bakar", "Periksa lokasi dan jam operator bahan bakar sebelum perjalanan."], ["Pengisian listrik", "Lokasi dan ketersediaan pengisian kendaraan di destinasi belum diverifikasi; rencanakan titik yang dikonfirmasi operator."], ["Sampah & kebersihan", "Bawa kembali sampah dan ikuti aturan kebersihan setempat."]] .map(([title,text]) => <article class="bg-[#123b30] p-6"><h3 class="font-extrabold text-[#f2f5ee]">{title}</h3><p class="mt-3 text-sm leading-7 text-white/58">{text}</p></article>)}
         </div>
       </div>
     </section>
@@ -269,8 +221,8 @@ const faqSchema = {
       <div class="section-shell grid gap-12 lg:grid-cols-[.75fr_1.25fr]">
         <div><p class="section-number !text-black/8">03</p><p class="eyebrow mt-7 text-[#1d5744]">Makan, menginap, kebutuhan harian</p><h2 class="display mt-5 text-5xl text-[#0b2820]">Netral, lokal, tanpa daftar sponsor.</h2></div>
         <div class="grid gap-8 md:grid-cols-2">
-          <div class="detail-card pt-6"><h3 class="display text-3xl text-[#0b2820]">Kuliner sekitar</h3><p class="mt-4 text-sm leading-7 text-black/60">Cari warung masakan Jawa atau menu rumahan di koridor Pronojiwo: nasi, sayur, sup, ayam, telur, gorengan, kopi, teh, dan buah adalah pilihan yang umum. Situs ini tidak memberi peringkat atau merekomendasikan nama usaha tertentu. Untuk trekking, prioritaskan sarapan ringan dan air yang cukup.</p></div>
-          <div class="detail-card pt-6"><h3 class="display text-3xl text-[#0b2820]">Penginapan</h3><p class="mt-4 text-sm leading-7 text-black/60">Homestay dan penginapan sederhana di sekitar Pronojiwo memudahkan start pagi. Untuk fasilitas lebih lengkap, pertimbangkan hotel di kota Lumajang atau Malang lalu berangkat lebih awal. Bandingkan lokasi, akses jalan, kebersihan, kebijakan pembatalan, dan ulasan terbaru.</p></div>
+          <div class="detail-card pt-6"><h3 class="display text-3xl text-[#0b2820]">Kuliner sekitar</h3><p class="mt-4 text-sm leading-7 text-black/60">Jika memerlukan makanan, periksa lokasi, jam buka, kebersihan dan kebutuhan diet kepada penyedia sebelum mengandalkannya. Situs ini tidak memberi peringkat atau merekomendasikan nama usaha tertentu; siapkan kebutuhan minum pribadi.</p></div>
+          <div class="detail-card pt-6"><h3 class="display text-3xl text-[#0b2820]">Penginapan</h3><p class="mt-4 text-sm leading-7 text-black/60">Jika membutuhkan penginapan untuk perjalanan ini, periksa langsung lokasi, akses, jam masuk, ketentuan pembatalan dan layanan yang diperlukan. Ketersediaan kamar atau fasilitas tertentu tidak dijamin oleh panduan ini.</p></div>
           <div class="detail-card pt-6"><h3 class="display text-3xl text-[#0b2820]">Belanja & uang tunai</h3><p class="mt-4 text-sm leading-7 text-black/60">Beli air, makanan ringan, obat pribadi, dan pelindung hujan sebelum memasuki jalur. Jangan mengandalkan pembayaran nontunai di semua titik; bawa uang tunai secukupnya tanpa menyimpan jumlah besar di tempat mudah terlihat.</p></div>
           <div class="detail-card pt-6"><h3 class="display text-3xl text-[#0b2820]">Bahan bakar & daya</h3><p class="mt-4 text-sm leading-7 text-black/60">Untuk motor/mobil konvensional, isi bahan bakar di area yang terverifikasi sebelum rute pegunungan. Untuk kendaraan listrik, periksa aplikasi jaringan pengisian resmi dan pilih titik yang telah dikonfirmasi aktif; jangan mengandalkan fasilitas pengisian di objek wisata.</p></div>
         </div>
@@ -278,15 +230,8 @@ const faqSchema = {
     </section>
 
     <section id="sekitar" class="overflow-hidden bg-[#dfe8db]">
-      <div class="section-shell py-24 md:py-32">
-        <p class="eyebrow text-[#1d5744]">Bentang alam sekitar</p><h2 class="display mt-5 max-w-4xl text-5xl leading-[.95] text-[#0b2820] md:text-7xl">Jangan buru-buru mengubahnya menjadi daftar ceklis.</h2><p class="mt-6 max-w-3xl text-base leading-8 text-black/60">Pronojiwo memiliki beberapa lanskap air yang saling berdekatan. Kunjungi hanya jika waktu, cuaca, dan kondisi fisik memungkinkan; akses setiap lokasi dapat berubah.</p>
-        <div class="mt-12 grid gap-5 lg:grid-cols-3">
-          <article class="rounded-[1.5rem] bg-[#0b2820] p-7 text-white"><p class="eyebrow text-[#bde1dc]">Dekat Tumpak Sewu</p><h3 class="display mt-5 text-4xl">Goa Tetes</h3><p class="mt-4 text-sm leading-7 text-white/62">Objek alam yang secara resmi disebut berada dekat Tumpak Sewu. Rute lembah dapat basah dan menuntut perhatian ekstra; cek akses saat tiba.</p></article>
-          <article class="rounded-[1.5rem] bg-white p-7"><p class="eyebrow text-[#688b58]">Kecamatan Pronojiwo</p><h3 class="display mt-5 text-4xl text-[#0b2820]">Kapas Biru</h3><p class="mt-4 text-sm leading-7 text-black/60">Air terjun lain di kawasan Pronojiwo dengan karakter jatuhan yang berbeda. Rencanakan sebagai kunjungan tersendiri jika trekking Tumpak Sewu sudah menguras tenaga.</p></article>
-          <article class="rounded-[1.5rem] bg-[#bd6843] p-7 text-[#071a16]"><p class="eyebrow">Koridor air terjun</p><h3 class="display mt-5 text-4xl">Kabut Pelangi</h3><p class="mt-4 text-sm font-medium leading-7">Pilihan lanskap lain di kawasan selatan Semeru. Jangan menggabungkan terlalu banyak tujuan bila hujan atau kondisi jalur memburuk.</p></article>
-        </div>
-      </div>
-      <figure class="relative h-[520px] md:h-[650px]"><img src="/images/tumpak-sewu-jungle.webp" alt="Tumpak Sewu di tengah hutan hijau dan kabut lembah" class="absolute inset-0 h-full w-full object-cover" width="1800" height="1200" loading="lazy" /><div class="absolute inset-0 bg-gradient-to-t from-[#071a16]/70 to-transparent"></div><figcaption class="absolute bottom-6 left-6 rounded-full bg-black/45 px-3 py-1.5 text-[.65rem] text-white/80 backdrop-blur">Foto nyata Tumpak Sewu · Joni Agung / Pexels</figcaption></figure>
+      <div class="section-shell py-24 md:py-32"><p class="eyebrow text-[#1d5744]">Rencana lanjutan</p><h2 class="display mt-5 max-w-4xl text-5xl text-[#0b2820]">Sisakan ruang untuk kondisi di lapangan.</h2><div class="mt-12 grid gap-5 lg:grid-cols-3"><article class="rounded-[1.5rem] bg-[#0b2820] p-7 text-white"><h3 class="display text-3xl">Cakupan tujuan</h3><p class="mt-4 text-sm leading-7 text-white/65">Konfirmasikan titik tujuan dan batas tiket untuk setiap area. Kedekatan lokasi tidak berarti rute atau tiketnya sama.</p></article><article class="rounded-[1.5rem] bg-white p-7"><h3 class="display text-3xl text-[#0b2820]">Cuaca & jalur</h3><p class="mt-4 text-sm leading-7 text-black/65">Jangan menambah tujuan ketika kondisi memburuk atau petugas membatasi akses. Pilih rencana yang dapat diubah.</p></article><article class="rounded-[1.5rem] bg-[#bd6843] p-7 text-[#071a16]"><h3 class="display text-3xl">Perjalanan pulang</h3><p class="mt-4 text-sm leading-7">Sisakan waktu untuk kembali ke titik jemput dan sambungan yang sudah dikonfirmasi, tanpa durasi jalur yang dijamin.</p></article></div></div>
+      <figure class="relative h-[520px] md:h-[650px]"><img src="/images/tumpak-sewu-jungle.webp" alt="Tumpak Sewu di tengah hutan hijau dan kabut lembah" class="absolute inset-0 h-full w-full object-cover" width="1800" height="1200" loading="lazy" /><div class="absolute inset-0 bg-gradient-to-t from-[#071a16]/70 to-transparent"></div><figcaption class="absolute bottom-6 left-6 rounded-full bg-black/45 px-3 py-1.5 text-[.65rem] text-white/80 backdrop-blur">Foto Tumpak Sewu · <a href="https://www.pexels.com/photo/tumpak-sewu-waterfall-in-lush-java-jungle-32402818/">Joni Agung / Pexels</a></figcaption></figure>
     </section>
 
     <section id="peta" class="bg-[#071a16] py-24 text-white md:py-32">
@@ -302,14 +247,13 @@ const faqSchema = {
       <div class="section-shell grid gap-10 lg:grid-cols-[.7fr_1.3fr]">
         <div><p class="eyebrow text-[#1d5744]">Metode editorial</p><h2 class="display mt-5 text-5xl text-[#0b2820]">Apa yang kami anggap sebagai sumber kuat.</h2></div>
         <div>
-          <p class="text-base leading-8 text-black/62">Informasi inti dikumpulkan dari sumber pemerintah dan pariwisata publik, lalu dibandingkan dengan data lokasi aktual. Untuk hal yang cepat berubah—tarif, jam buka, status jalur, cuaca, transportasi—kami sengaja memakai bahasa bersyarat dan mendorong pemeriksaan ulang.</p>
+          <p class="text-base leading-8 text-black/62">Sumber diperiksa 19 Oktober 2026. Lokasi, jam dan penilaian dirujuk melalui catatan Maps bertanggal. Berita pemerintah 2 Februari 2026 serta kesepakatan historis 24 Desember 2024 dipakai sesuai tanggal dan cakupannya, bukan sebagai jaminan tarif atau status jalur hari ini.</p>
           <div class="mt-8 grid gap-4 md:grid-cols-2">
-            <a href="https://www.lumajangkab.go.id/berita-opd/detail/136" target="_blank" rel="noopener noreferrer" class="focus-ring rounded-2xl border border-black/10 p-5 hover:bg-white"><span class="eyebrow text-[#688b58]">Lanskap & fasilitas</span><strong class="mt-3 block text-sm">Pemerintah Kabupaten Lumajang</strong></a>
-            <a href="https://portalberita.lumajangkab.go.id/main/baca/aXKFepZs" target="_blank" rel="noopener noreferrer" class="focus-ring rounded-2xl border border-black/10 p-5 hover:bg-white"><span class="eyebrow text-[#688b58]">Tarif domestik</span><strong class="mt-3 block text-sm">Portal berita Pemkab Lumajang</strong></a>
-            <a href="https://bapperida.lumajangkab.go.id/berita-kabupaten/413743" target="_blank" rel="noopener noreferrer" class="focus-ring rounded-2xl border border-black/10 p-5 hover:bg-white"><span class="eyebrow text-[#688b58]">Keselamatan jalur</span><strong class="mt-3 block text-sm">Pemerintah Kabupaten Lumajang</strong></a>
-            <a href="https://www.indonesia.travel/gb/en/travel-ideas/adventure/air-terjun-terindah-di-indonesia" target="_blank" rel="noopener noreferrer" class="focus-ring rounded-2xl border border-black/10 p-5 hover:bg-white"><span class="eyebrow text-[#688b58]">Pariwisata nasional</span><strong class="mt-3 block text-sm">Kementerian Pariwisata · Indonesia Travel</strong></a>
+            <a href="https://lumajangkab.go.id/berita-opd/detail/6795" target="_blank" rel="noopener noreferrer" class="focus-ring rounded-2xl border border-black/10 p-5 hover:bg-white"><span class="eyebrow text-[#688b58]">Pembahasan pungutan · 2026</span><strong class="mt-3 block text-sm">Pemerintah Kabupaten Lumajang</strong></a>
+            <a href="https://lumajangkab.go.id/berita-opd/detail/4222" target="_blank" rel="noopener noreferrer" class="focus-ring rounded-2xl border border-black/10 p-5 hover:bg-white"><span class="eyebrow text-[#688b58]">Kesepakatan historis · 2024</span><strong class="mt-3 block text-sm">Portal berita Pemkab Lumajang</strong></a>
           </div>
-          <p class="mt-6 text-xs leading-6 text-black/48">Tidak semua sumber menggunakan angka atau istilah yang sama. Bila tidak ada pembaruan resmi yang cukup kuat, panduan ini memilih tidak menampilkan angka pasti daripada menebak.</p>
+          <p class="mt-6 text-xs leading-6 text-black/48">Fotografi: Jagad Lanang, Timur Kozmenko, Iqbal Kurniawan dan Joni Agung, melalui Pexels. <a href="https://www.pexels.com/license/" class="underline">Lisensi Pexels</a>. Foto menggambarkan destinasi, bukan konfirmasi akses atau kondisi pada hari ini.</p>
+          <p class="mt-6 text-xs leading-6 text-black/48">Catatan Maps bukan situs operator. Sebelum berangkat, periksa cuaca serta konfirmasikan jam, harga dan area yang benar-benar diizinkan melalui petugas di lokasi.</p>
         </div>
       </div>
     </section>
