@@ -53,15 +53,15 @@ import LegalLayout from '../layouts/LegalLayout.astro';
         if (Object.keys(data).length === 0) {
           status.textContent = 'Belum ada pilihan opsional yang tersimpan. Analitik tidak dimuat sampai Anda mengaktifkannya.';
         } else {
-          status.textContent = `Preferensi tersimpan — analitik: ${data.analytics ? 'aktif' : 'nonaktif'}, preferensi: ${data.preferences ? 'aktif' : 'nonaktif'}, pemasaran: nonaktif.`;
+          status.textContent = `Preferensi tersimpan — analitik: ${data.analytics ? 'aktif' : 'nonaktif'}, preferensi: ${data.preferences ? 'aktif' : 'nonaktif'}, pemasaran: nonaktif. Muat ulang halaman untuk menerapkan perubahan analitik.`;
         }
       };
       save.addEventListener('click', () => {
-        localStorage.setItem(key, JSON.stringify({ analytics: analytics.checked, preferences: preferences.checked, marketing: false, updated: '2026-08' }));
+        try { localStorage.setItem(key, JSON.stringify({ analytics: analytics.checked, preferences: preferences.checked, marketing: false, updated: '2026-10-19' })); } catch { status.textContent = 'Penyimpanan tidak tersedia; pilihan belum tersimpan.'; return; }
         render();
       });
       reject.addEventListener('click', () => {
-        localStorage.setItem(key, JSON.stringify({ analytics: false, preferences: false, marketing: false, updated: '2026-08' }));
+        try { localStorage.setItem(key, JSON.stringify({ analytics: false, preferences: false, marketing: false, updated: '2026-10-19' })); } catch { status.textContent = 'Penyimpanan tidak tersedia; pilihan belum tersimpan.'; return; }
         render();
       });
       render();

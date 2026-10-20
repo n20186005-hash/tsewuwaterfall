@@ -9,22 +9,23 @@ interface Props {
   image?: string;
   schema?: unknown | unknown[];
   bodyClass?: string;
+  noindex?: boolean;
 }
-const { title, description, image = '/images/tumpak-sewu-aerial.webp', schema, bodyClass = '' } = Astro.props;
-const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+const { title, description, image = '/images/tumpak-sewu-aerial.webp', schema, bodyClass = '', noindex = false } = Astro.props;
+const canonical = !noindex && Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
 const absoluteImage = Astro.site ? new URL(image, Astro.site).href : undefined;
-const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
+const schemas = !noindex && schema ? (Array.isArray(schema) ? schema : [schema]) : [];
 ---
 <!doctype html>
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content="#0b2820" />
-    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta name="robots" content={noindex ? "noindex,follow" : "index,follow,max-image-preview:large"} />
     {canonical && <link rel="canonical" href={canonical} />}
     <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png" />
@@ -38,12 +39,12 @@ const schemas = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
     {canonical && <meta property="og:url" content={canonical} />}
     {absoluteImage && <meta property="og:image" content={absoluteImage} />}
     <meta name="twitter:card" content="summary_large_image" />
-    {schemas.map((item) => <script type="application/ld+json" set:html={JSON.stringify(item)}></script>)}
+    {schemas.map((item) => <script is:inline type="application/ld+json" set:html={JSON.stringify(item)}></script>)}
     <script is:inline>
       (() => {
-        const consent = localStorage.getItem('tumpakSewuCookieConsent');
-        if (!consent) return;
         try {
+          const consent = localStorage.getItem('tumpakSewuCookieConsent');
+          if (!consent) return;
           const prefs = JSON.parse(consent);
           if (prefs.analytics !== true) return;
           window.dataLayer = window.dataLayer || [];

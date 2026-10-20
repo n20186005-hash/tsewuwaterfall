@@ -1,16 +1,17 @@
 ---
 import Logo from './Logo.astro';
 ---
-<header class="absolute inset-x-0 top-0 z-30 text-white">
-  <div class="section-shell flex items-center justify-between py-5">
+<header class="site-main-header relative inset-x-0 top-0 z-30 bg-[#071a16] text-white lg:absolute lg:bg-transparent">
+  <div class="section-shell flex flex-wrap items-center justify-between gap-4 py-5">
     <Logo dark />
-    <nav class="hidden items-center gap-6 text-sm font-semibold lg:flex" aria-label="Navigasi utama">
-      <a class="focus-ring rounded-sm hover:text-[#bde1dc]" href="#kisah">Lanskap</a>
-      <a class="focus-ring rounded-sm hover:text-[#bde1dc]" href="#rute">Rute</a>
-      <a class="focus-ring rounded-sm hover:text-[#bde1dc]" href="#transportasi">Transportasi</a>
-      <a class="focus-ring rounded-sm hover:text-[#bde1dc]" href="#fasilitas">Fasilitas</a>
-      <a class="focus-ring rounded-sm hover:text-[#bde1dc]" href="#faq">Tanya jawab</a>
+    <nav class="order-3 grid w-full grid-cols-3 items-center gap-x-4 gap-y-1 text-sm font-semibold lg:order-none lg:flex lg:w-auto lg:gap-6" aria-label="Navigasi utama">
+      <a class="focus-ring inline-flex min-h-11 items-center rounded-sm hover:text-[#bde1dc]" href="#kisah">Lanskap</a>
+      <a class="focus-ring inline-flex min-h-11 items-center rounded-sm hover:text-[#bde1dc]" href="#rute">Rute</a>
+      <a class="focus-ring inline-flex min-h-11 items-center rounded-sm hover:text-[#bde1dc]" href="#transportasi">Transportasi</a>
+      <a class="focus-ring inline-flex min-h-11 items-center rounded-sm hover:text-[#bde1dc]" href="#fasilitas">Fasilitas</a>
+      <a class="focus-ring inline-flex min-h-11 items-center rounded-sm hover:text-[#bde1dc]" href="#peta">Peta</a>
+      <a class="focus-ring inline-flex min-h-11 items-center rounded-sm hover:text-[#bde1dc]" href="#faq">Tanya jawab</a>
     </nav>
-    <a href="#rencanakan" class="focus-ring rounded-full border border-white/45 bg-white/10 px-4 py-2 text-xs font-extrabold uppercase tracking-[.12em] backdrop-blur hover:bg-white hover:text-[#0b2820]">Rencanakan</a>
+    <a href="#rencanakan" class="focus-ring inline-flex min-h-11 items-center rounded-full border border-white/45 bg-white/10 px-4 py-2 text-xs font-extrabold uppercase tracking-[.12em] backdrop-blur hover:bg-white hover:text-[#0b2820]">Rencanakan</a>
   </div>
 </header>
