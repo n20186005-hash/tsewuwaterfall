@@ -11,16 +11,26 @@
         window.readTumpakConsent = () => {
           let data = {};
           try { data = JSON.parse(localStorage.getItem(key) || '{}') || {}; } catch {}
-          try { if (sessionStorage.getItem(vetoKey) === '1') data.analytics = false; } catch {}
+          try { if (sessionStorage.getItem(vetoKey) === '1') data.analytics = false; } catch { data.analytics = false; }
           if (currentAllow !== null) data.analytics = currentAllow;
           return data;
         };
         window.setTumpakAnalytics = (allow) => {
+          let sessionSaved = false;
+          try {
+            if (allow) {
+              sessionStorage.removeItem(vetoKey);
+              if (sessionStorage.getItem(vetoKey) === '1') throw new Error('Veto retained');
+            } else sessionStorage.setItem(vetoKey, '1');
+            sessionSaved = true;
+          } catch {
+            if (allow) {
+              try { if (sessionStorage.getItem(vetoKey) === '1') allow = false; } catch { allow = false; }
+            }
+          }
           currentAllow = allow;
           window['ga-disable-' + id] = !allow;
           window.gtag('consent', 'update', { analytics_storage: allow ? 'granted' : 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
-          let sessionSaved = false;
-          try { if (allow) sessionStorage.removeItem(vetoKey); else sessionStorage.setItem(vetoKey, '1'); sessionSaved = true; } catch {}
           if (allow && !loaded) {
             loaded = true;
             window.gtag('js', new Date());
@@ -32,6 +42,13 @@
           }
           return sessionSaved;
         };
+        window.addEventListener('storage', (event) => {
+          if (event.key !== key) return;
+          let granted = false;
+          try { granted = JSON.parse(event.newValue || '{}').analytics === true; } catch {}
+          if (!granted) window.setTumpakAnalytics(false);
+          window.dispatchEvent(new Event('tumpak-consent-change'));
+        });
         window.gtag('consent', 'default', { analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
         window.setTumpakAnalytics(window.readTumpakConsent().analytics === true);
       })();
@@ -52,6 +69,7 @@
       };
       const apply = (allow, preference) => {
         const sessionSaved = window.setTumpakAnalytics?.(allow);
+        allow = window.readTumpakConsent?.().analytics === true;
         analytics.checked = allow;
         preferences.checked = preference;
         let saved = false;
@@ -60,6 +78,7 @@
           : !allow && sessionSaved ? 'Google Analytics dinonaktifkan untuk tab ini; penyimpanan permanen gagal. Pilihan tidak dijamin di tab atau peramban lain.'
           : 'Pilihan berlaku untuk halaman ini; tidak dapat disimpan untuk navigasi, pemuatan ulang, tab atau peramban lain.';
       };
+      window.addEventListener('tumpak-consent-change', () => { analytics.checked = window.readTumpakConsent?.().analytics === true; status.textContent = 'Google Analytics ' + (analytics.checked ? 'aktif.' : 'nonaktif.') + ' Pilihan diperbarui setelah perubahan di tab lain.'; });
       save.addEventListener('click', () => apply(analytics.checked, preferences.checked));
       reject.addEventListener('click', () => apply(false, false));
       render();

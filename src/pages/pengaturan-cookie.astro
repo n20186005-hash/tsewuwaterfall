@@ -55,6 +55,7 @@ import LegalLayout from '../layouts/LegalLayout.astro';
       };
       const apply = (allow, preference) => {
         const sessionSaved = window.setTumpakAnalytics?.(allow);
+        allow = window.readTumpakConsent?.().analytics === true;
         analytics.checked = allow;
         preferences.checked = preference;
         let saved = false;
@@ -63,6 +64,7 @@ import LegalLayout from '../layouts/LegalLayout.astro';
           : !allow && sessionSaved ? 'Google Analytics dinonaktifkan untuk tab ini; penyimpanan permanen gagal. Pilihan tidak dijamin di tab atau peramban lain.'
           : 'Pilihan berlaku untuk halaman ini; tidak dapat disimpan untuk navigasi, pemuatan ulang, tab atau peramban lain.';
       };
+      window.addEventListener('tumpak-consent-change', () => { analytics.checked = window.readTumpakConsent?.().analytics === true; status.textContent = 'Google Analytics ' + (analytics.checked ? 'aktif.' : 'nonaktif.') + ' Pilihan diperbarui setelah perubahan di tab lain.'; });
       save.addEventListener('click', () => apply(analytics.checked, preferences.checked));
       reject.addEventListener('click', () => apply(false, false));
       render();
