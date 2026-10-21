@@ -25,8 +25,11 @@ import LegalLayout from '../layouts/LegalLayout.astro';
     </section>
   </div>
 
+  <h2>Kinerja hosting Cloudflare</h2>
+  <p>Hosting Cloudflare menyisipkan beacon Cloudflare Insights (RUM) secara terpisah dari Google Analytics. Beacon ini dapat mengirim metrik kinerja halaman, URL halaman dan perujuk ke Cloudflare. Menurut dokumentasi Cloudflare, beacon tidak menggunakan kuki atau penyimpanan peramban dan alamat IP yang diterima dalam permintaan dibuang di pusat data terdekat. Pengaturan Google Analytics di situs ini tidak mengendalikan beacon hosting tersebut. Keberadaan skrip tidak membuktikan pengiriman metrik berhasil.</p>
+  <p><a href="https://developers.cloudflare.com/speed/observatory/rum-beacon/" target="_blank" rel="noopener noreferrer">Dokumentasi Cloudflare RUM · diperiksa 21 Oktober 2026</a></p>
   <h2>Pengelolaan persetujuan</h2>
-  <p>Anda dapat menyimpan pilihan atau menolak semua kategori opsional. Menolak analitik tidak menghalangi akses ke panduan, peta, atau isi utama. Jika Anda mengaktifkan analitik setelah halaman dimuat, perubahan akan diterapkan sepenuhnya setelah pemuatan ulang halaman berikutnya.</p>
+  <p>Anda dapat menyimpan pilihan atau menolak semua kategori opsional. Menolak analitik tidak menghalangi akses ke panduan, peta, atau isi utama. Pilihan Google Analytics diterapkan segera. Jika penyimpanan lokal gagal, penolakan dapat dipertahankan untuk tab ini selama penyimpanan sesi tersedia; bila keduanya gagal, penolakan hanya berlaku untuk halaman ini. Pilihan tidak dijamin berlaku di tab atau peramban lain.</p>
   <div class="mt-7 flex flex-wrap gap-3">
     <button id="save-cookie" type="button" class="focus-ring rounded-full bg-[#0b2820] px-6 py-3 text-sm font-extrabold text-white hover:bg-[#1d5744]">Simpan preferensi</button>
     <button id="reject-cookie" type="button" class="focus-ring rounded-full border border-[#0b2820]/30 px-6 py-3 text-sm font-extrabold text-[#0b2820] hover:bg-white">Tolak semua yang opsional</button>
@@ -43,27 +46,25 @@ import LegalLayout from '../layouts/LegalLayout.astro';
       const status = document.getElementById('cookie-status');
       const save = document.getElementById('save-cookie');
       const reject = document.getElementById('reject-cookie');
-      const read = () => {
-        try { return JSON.parse(localStorage.getItem(key) || '{}'); } catch (_) { return {}; }
-      };
+      const read = () => window.readTumpakConsent?.() || {};
       const render = () => {
         const data = read();
         analytics.checked = data.analytics === true;
         preferences.checked = data.preferences === true;
-        if (Object.keys(data).length === 0) {
-          status.textContent = 'Belum ada pilihan opsional yang tersimpan. Analitik tidak dimuat sampai Anda mengaktifkannya.';
-        } else {
-          status.textContent = `Preferensi tersimpan — analitik: ${data.analytics ? 'aktif' : 'nonaktif'}, preferensi: ${data.preferences ? 'aktif' : 'nonaktif'}, pemasaran: nonaktif. Muat ulang halaman untuk menerapkan perubahan analitik.`;
-        }
+        status.textContent = `Google Analytics: ${analytics.checked ? 'aktif' : 'nonaktif'}; preferensi: ${preferences.checked ? 'aktif' : 'nonaktif'}; pemasaran: nonaktif. Kontrol ini tidak mengubah beacon hosting Cloudflare.`;
       };
-      save.addEventListener('click', () => {
-        try { localStorage.setItem(key, JSON.stringify({ analytics: analytics.checked, preferences: preferences.checked, marketing: false, updated: '2026-10-19' })); } catch { status.textContent = 'Penyimpanan tidak tersedia; pilihan belum tersimpan.'; return; }
-        render();
-      });
-      reject.addEventListener('click', () => {
-        try { localStorage.setItem(key, JSON.stringify({ analytics: false, preferences: false, marketing: false, updated: '2026-10-19' })); } catch { status.textContent = 'Penyimpanan tidak tersedia; pilihan belum tersimpan.'; return; }
-        render();
-      });
+      const apply = (allow, preference) => {
+        const sessionSaved = window.setTumpakAnalytics?.(allow);
+        analytics.checked = allow;
+        preferences.checked = preference;
+        let saved = false;
+        try { localStorage.setItem(key, JSON.stringify({ analytics: allow, preferences: preference, marketing: false, updated: '2026-10-21' })); saved = true; } catch {}
+        status.textContent = saved && sessionSaved ? 'Preferensi disimpan; Google Analytics ' + (allow ? 'aktif.' : 'nonaktif.')
+          : !allow && sessionSaved ? 'Google Analytics dinonaktifkan untuk tab ini; penyimpanan permanen gagal. Pilihan tidak dijamin di tab atau peramban lain.'
+          : 'Pilihan berlaku untuk halaman ini; tidak dapat disimpan untuk navigasi, pemuatan ulang, tab atau peramban lain.';
+      };
+      save.addEventListener('click', () => apply(analytics.checked, preferences.checked));
+      reject.addEventListener('click', () => apply(false, false));
       render();
     })();
   </script>

@@ -42,21 +42,40 @@ const schemas = !noindex && schema ? (Array.isArray(schema) ? schema : [schema])
     {schemas.map((item) => <script is:inline type="application/ld+json" set:html={JSON.stringify(item)}></script>)}
     <script is:inline>
       (() => {
-        try {
-          const consent = localStorage.getItem('tumpakSewuCookieConsent');
-          if (!consent) return;
-          const prefs = JSON.parse(consent);
-          if (prefs.analytics !== true) return;
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){window.dataLayer.push(arguments);}
-          window.gtag = gtag;
-          gtag('js', new Date());
-          gtag('config', 'G-HXM22WWPKP', { anonymize_ip: true });
-          const s = document.createElement('script');
-          s.async = true;
-          s.src = 'https://www.googletagmanager.com/gtag/js?id=G-HXM22WWPKP';
-          document.head.appendChild(s);
-        } catch (_) { /* preferensi rusak: jangan muat analitik */ }
+        const key = 'tumpakSewuCookieConsent';
+        const vetoKey = key + '-denied';
+        const id = 'G-HXM22WWPKP';
+        if (window.setTumpakAnalytics) return;
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+        let loaded = false;
+        let currentAllow = null;
+        window.readTumpakConsent = () => {
+          let data = {};
+          try { data = JSON.parse(localStorage.getItem(key) || '{}') || {}; } catch {}
+          try { if (sessionStorage.getItem(vetoKey) === '1') data.analytics = false; } catch {}
+          if (currentAllow !== null) data.analytics = currentAllow;
+          return data;
+        };
+        window.setTumpakAnalytics = (allow) => {
+          currentAllow = allow;
+          window['ga-disable-' + id] = !allow;
+          window.gtag('consent', 'update', { analytics_storage: allow ? 'granted' : 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
+          let sessionSaved = false;
+          try { if (allow) sessionStorage.removeItem(vetoKey); else sessionStorage.setItem(vetoKey, '1'); sessionSaved = true; } catch {}
+          if (allow && !loaded) {
+            loaded = true;
+            window.gtag('js', new Date());
+            window.gtag('config', id, { anonymize_ip: true });
+            const s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=' + id;
+            document.head.appendChild(s);
+          }
+          return sessionSaved;
+        };
+        window.gtag('consent', 'default', { analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
+        window.setTumpakAnalytics(window.readTumpakConsent().analytics === true);
       })();
     </script>
   </head>
